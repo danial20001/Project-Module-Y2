@@ -32,6 +32,7 @@ namespace Project_POS.Model
         private void frmPOS_Load(object sender, EventArgs e)
         {
             AddCategory();
+            LoadProducts();
         }
 
         private void guna2Button9_Click(object sender, EventArgs e)
@@ -88,21 +89,98 @@ namespace Project_POS.Model
         }
 
 
-        private void CategoryPanel_Paint(object sender, PaintEventArgs e)
+        private void AddItems(string id, string name, string cat, string price)
         {
+            // Convert price string to double
+            double productPrice = double.Parse(price);
+
+            var w = new ucProduct()
+            {
+                PName = name,
+                PPrice = productPrice, // Assign converted price
+                PCategory = cat,
+                id = Convert.ToInt32(id)
+            };
+
+            ProductPanel.Controls.Add(w);
+
+            w.onSelect += (ss, ee) =>
+            {
+                var wdg = (ucProduct)ss;
+                bool found = false;
+                foreach (DataGridViewRow item in guna2DataGridView1.Rows)
+                {
+                    // Check if product already exists
+                    if (Convert.ToInt32(item.Cells["dgvid"].Value) == wdg.id)
+                    {
+                        // Update quantity and amount
+                        item.Cells["dgvQty"].Value = Convert.ToInt32(item.Cells["dgvQty"].Value) + 1;
+                        item.Cells["dgvAmount"].Value = Convert.ToDouble(item.Cells["dgvQty"].Value) * Convert.ToDouble(item.Cells["dgvPrice"].Value);
+                        found = true;
+                        break;
+                    }
+                }
+
+                // If product not found, add a new row
+                if (!found)
+                {
+                    guna2DataGridView1.Rows.Add(new object[] { 0, wdg.id, wdg.PName, 1, wdg.PPrice, wdg.PPrice });
+                }
+            };
+        }
+
+
+
+
+
+
+        //getting product from database
+
+        private void LoadProducts()
+        {
+
+            string qry = "SELECT * FROM products inner join category on catID = CategoryID";
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                ProductPanel.Controls.Clear();
+                foreach (DataRow item in dt.Rows)
+                {
+
+                    AddItems(item["pID"].ToString(),item["pName"].ToString(), item["catName"].ToString(),
+                        item["pPrice"].ToString() );
+
+
+                }
+
+
+            }
+
+
 
         }
 
-        private void CategoryButton_Click(object sender, EventArgs e)
-        {
-            // Handle category button click
-            var button = sender as Guna.UI2.WinForms.Guna2Button;
-            MessageBox.Show("You clicked: " + button.Text);
-        }
 
-        private void guna2Panel3_Paint(object sender, PaintEventArgs e)
-        {
 
+            private void CategoryPanel_Paint(object sender, PaintEventArgs e)
+            {
+
+            }
+
+            private void CategoryButton_Click(object sender, EventArgs e)
+            {
+                // Handle category button click
+                var button = sender as Guna.UI2.WinForms.Guna2Button;
+                MessageBox.Show("You clicked: " + button.Text);
+            }
+
+            private void guna2Panel3_Paint(object sender, PaintEventArgs e)
+            {
+
+            }
         }
     }
-}
