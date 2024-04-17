@@ -8,7 +8,7 @@ namespace Project_POS
 {
     internal class Database
     {
-        private const string ConnectionString = "server=127.0.0.1;port=3307;database=u2280965;user=u2280965;password=DS02jul01ds;";
+        public const string ConnectionString = "server=127.0.0.1;port=3307;database=u2280965;user=u2280965;password=DS02jul01ds;";
 
         public static MySqlConnection Connect()
         {

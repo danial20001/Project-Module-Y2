@@ -1,4 +1,5 @@
-﻿using Project_POS.View;
+﻿using Project_POS.Model;
+using Project_POS.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,7 +88,8 @@ namespace Project_POS
 
         private void guna2Button7_Click(object sender, EventArgs e)
         {
-
+            frmPOS frm = new frmPOS();
+            frm.Show();
         }
 
         private void label1_Click(object sender, EventArgs e)
