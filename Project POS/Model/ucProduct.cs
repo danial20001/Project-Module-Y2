@@ -20,7 +20,8 @@ namespace Project_POS.Model
 
         private void lblProcut_Click(object sender, EventArgs e)
         {
-
+            // Raise the onSelect event when the label is clicked
+            onSelect?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler onSelect = null;

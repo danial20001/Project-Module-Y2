@@ -73,6 +73,16 @@ namespace Project_POS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _3807871 {
+            get {
+                object obj = ResourceManager.GetObject("3807871", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _424965_200 {
             get {
                 object obj = ResourceManager.GetObject("424965-200", resourceCulture);
@@ -116,6 +126,16 @@ namespace Project_POS.Properties {
         internal static System.Drawing.Bitmap _8367793 {
             get {
                 object obj = ResourceManager.GetObject("8367793", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap circle_edit_line_icon_icons_com_66940 {
+            get {
+                object obj = ResourceManager.GetObject("circle-edit-line_icon-icons.com_66940", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -17,6 +17,8 @@ namespace Project_POS.Model
         public frmPOS()
         {
             InitializeComponent();
+            guna2DataGridView1.CellClick += guna2DataGridView1_CellClick;
+
         }
 
         private void guna2Button7_Click(object sender, EventArgs e)
@@ -91,48 +93,63 @@ namespace Project_POS.Model
 
         private void AddItems(string id, string name, string cat, string price)
         {
-            // Convert price string to double
-            double productPrice = double.Parse(price);
+            double productPrice;
+            if (!double.TryParse(price, out productPrice))
+            {
+                MessageBox.Show("Invalid price format");
+                return;
+            }
 
-            var w = new ucProduct()
+            var productControl = new ucProduct()
             {
                 PName = name,
-                PPrice = productPrice, // Assign converted price
+                PPrice = productPrice, // Ensure the price is parsed correctly
                 PCategory = cat,
-                id = Convert.ToInt32(id)
+                id = int.Parse(id) // Safe parsing should be implemented
             };
 
-            ProductPanel.Controls.Add(w);
+            // Attach the onSelect event handler
+            productControl.onSelect += Product_OnSelect;
 
-            w.onSelect += (ss, ee) =>
-            {
-                var wdg = (ucProduct)ss;
-                bool found = false;
-                foreach (DataGridViewRow item in guna2DataGridView1.Rows)
-                {
-                    // Check if product already exists
-                    if (Convert.ToInt32(item.Cells["dgvid"].Value) == wdg.id)
-                    {
-                        // Update quantity and amount
-                        item.Cells["dgvQty"].Value = Convert.ToInt32(item.Cells["dgvQty"].Value) + 1;
-                        item.Cells["dgvAmount"].Value = Convert.ToDouble(item.Cells["dgvQty"].Value) * Convert.ToDouble(item.Cells["dgvPrice"].Value);
-                        found = true;
-                        break;
-                    }
-                }
-
-                // If product not found, add a new row
-                if (!found)
-                {
-                    guna2DataGridView1.Rows.Add(new object[] { 0, wdg.id, wdg.PName, 1, wdg.PPrice, wdg.PPrice });
-                }
-            };
+            // Add the UserControl to the ProductPanel
+            ProductPanel.Controls.Add(productControl);
         }
 
 
+        private void Product_OnSelect(object sender, EventArgs e)
+        {
+            var product = sender as ucProduct;
+            if (product == null) return;
 
+            bool found = false;
+            foreach (DataGridViewRow row in guna2DataGridView1.Rows)
+            {
+                if (Convert.ToInt32(row.Cells["dgvid"].Value) == product.id)
+                {
+                    // Product exists, increase quantity
+                    int qty = Convert.ToInt32(row.Cells["dgvQty"].Value) + 1;
+                    row.Cells["dgvQty"].Value = qty;
+                    row.Cells["dgvAmount"].Value = qty * product.PPrice;
+                    found = true;
+                    break;
+                }
+            }
 
+            if (!found)
+            {
+                // Product does not exist, add a new row
+                guna2DataGridView1.Rows.Add(new object[] {
+            guna2DataGridView1.Rows.Count + 1, // Assuming first column is a row number which auto-increments
+            product.id,
+            product.PName,
+            1, // Quantity
+            product.PPrice,
+            product.PPrice // Initial amount is just the price as quantity is 1
+        });
+            }
 
+            UpdateTotal();  // Update the total whenever products are added or quantities are changed
+        }
 
         //getting product from database
 
@@ -151,36 +168,151 @@ namespace Project_POS.Model
                 foreach (DataRow item in dt.Rows)
                 {
 
-                    AddItems(item["pID"].ToString(),item["pName"].ToString(), item["catName"].ToString(),
-                        item["pPrice"].ToString() );
+                    AddItems(item["pID"].ToString(), item["pName"].ToString(), item["catName"].ToString(),
+                        item["pPrice"].ToString());
 
 
                 }
+            }
+        }
+
+        private void CategoryPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CategoryButton_Click(object sender, EventArgs e)
+        {
+            var button = sender as Guna.UI2.WinForms.Guna2Button;
+            if (button == null) return;
+
+            // Display the clicked category
+           // MessageBox.Show("You clicked: " + button.Text);
+
+            // Load products filtered by the category name associated with the button
+            LoadProductsFilteredByCategory(button.Text);
+        }
 
 
+        private void guna2Panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            // Retrieve the search text from the textbox
+            string searchText = txtSearch.Text.ToLower().Trim();
+
+            // Clear existing controls in the ProductPanel
+            ProductPanel.Controls.Clear();
+
+            // Reload and filter products based on the search text
+            LoadProductsFiltered(searchText);
+        }
+
+
+        private void LoadProductsFiltered(string searchText)
+        {
+            string qry = "SELECT * FROM products INNER JOIN category ON catID = CategoryID";
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow item in dt.Rows)
+                {
+                    string productName = item["pName"].ToString();
+                    string productCategory = item["catName"].ToString();
+                    // Filter products based on name or category containing the search text
+                    if (productName.ToLower().Contains(searchText) || productCategory.ToLower().Contains(searchText))
+                    {
+                        AddItems(item["pID"].ToString(), productName, productCategory, item["pPrice"].ToString());
+                    }
+                }
+            }
+        }
+
+
+        private void UpdateTotal()
+        {
+            double total = 0;
+            foreach (DataGridViewRow row in guna2DataGridView1.Rows)
+            {
+                double amount = 0;
+                // Safely try to parse the Amount column values
+                if (double.TryParse(row.Cells["dgvAmount"].Value?.ToString(), out amount))
+                {
+                    total += amount;
+                }
             }
 
+            // Update the lblTotal text
+            lblTotal.Text = $"Total: £{total:N2}";  // N2 formats the number as a currency with 2 decimal places
+        }
 
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the click is on the delete image column
+            if (e.RowIndex >= 0 && e.ColumnIndex == guna2DataGridView1.Columns["dgvdel"].Index)
+            {
+                // Confirm deletion
+                if (MessageBox.Show("Are you sure you want to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    guna2DataGridView1.Rows.RemoveAt(e.RowIndex);
+
+                    // Update the total after deletion
+                    UpdateTotal();
+                }
+            }
+        }
+
+        private void ProductPanel_Paint(object sender, PaintEventArgs e)
+        {
 
         }
 
 
+        private void LoadProductsFilteredByCategory(string categoryName)
+        {
+            string qry = "SELECT products.pID, products.pName, category.catName, products.pPrice " +
+                         "FROM products " +
+                         "INNER JOIN category ON products.CategoryID = category.catID " +
+                         "WHERE category.catName = @CategoryName;";
 
-            private void CategoryPanel_Paint(object sender, PaintEventArgs e)
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-            }
-
-            private void CategoryButton_Click(object sender, EventArgs e)
-            {
-                // Handle category button click
-                var button = sender as Guna.UI2.WinForms.Guna2Button;
-                MessageBox.Show("You clicked: " + button.Text);
-            }
-
-            private void guna2Panel3_Paint(object sender, PaintEventArgs e)
-            {
-
+                ProductPanel.Controls.Clear();
+                foreach (DataRow item in dt.Rows)
+                {
+                    AddItems(item["pID"].ToString(), item["pName"].ToString(), item["catName"].ToString(), item["pPrice"].ToString());
+                }
             }
         }
+
     }
+}

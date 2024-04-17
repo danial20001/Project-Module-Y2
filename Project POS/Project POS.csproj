@@ -317,5 +317,11 @@
   <ItemGroup>
     <None Include="Resources\fotor-20240414195717.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle-edit-line_icon-icons.com_66940.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3807871.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
