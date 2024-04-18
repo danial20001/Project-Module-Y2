@@ -23,7 +23,11 @@ namespace Project_POS.Model
 
         private void guna2Button7_Click(object sender, EventArgs e)
         {
-
+            lblTable.Text = "";
+            lblWaiter.Text = "";
+            lblTable.Visible = false;
+            lblWaiter.Visible = false;
+            OrderType = "Takeout";
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -187,7 +191,7 @@ namespace Project_POS.Model
             if (button == null) return;
 
             // Display the clicked category
-           // MessageBox.Show("You clicked: " + button.Text);
+            // MessageBox.Show("You clicked: " + button.Text);
 
             // Load products filtered by the category name associated with the button
             LoadProductsFilteredByCategory(button.Text);
@@ -313,6 +317,37 @@ namespace Project_POS.Model
                 }
             }
         }
+        public int MainID = 0;
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            lblTable.Text = "";
+            lblWaiter.Text = "";
+            lblTable.Visible = false;
+            lblWaiter.Visible = false;
+            guna2DataGridView1.Rows.Clear();
+            MainID = 0;
+            lblTotal.Text = "Total: £0";
+        }
 
+
+        public string OrderType;
+        private void guna2Button6_Click(object sender, EventArgs e)
+        {
+            lblTable.Text = "";
+            lblWaiter.Text = "";
+            lblTable.Visible = false;
+            lblWaiter.Visible = false;
+            OrderType = "Delivery";
+        }
+
+        private void kitchenbutton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblWaiter_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

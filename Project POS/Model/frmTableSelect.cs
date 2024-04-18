@@ -1,0 +1,123 @@
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Guna.UI2.WinForms;
+using System.Net.NetworkInformation; // Make sure this namespace is included
+
+namespace Project_POS.Model
+{
+    public partial class frmTableSelect : Form
+    {
+        private frmPOS parentForm;  // This will hold the reference to the frmPOS
+
+        public frmTableSelect(frmPOS parent)  // Constructor that accepts frmPOS
+        {
+            InitializeComponent();
+            parentForm = parent;  // Store the reference to the frmPOS instance
+        }
+
+        public frmTableSelect()
+        {
+        }
+
+        private void frmTableSelect_Load(object sender, EventArgs e)
+        {
+            LoadTables();
+        }
+
+        private void LoadTables()
+        {
+            string qry = "SELECT * FROM `tables`"; // Correct table name
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                flowLayoutPanel1.Controls.Clear();
+
+                // Define color palette for buttons
+                Color[] colors = new Color[]
+                {
+                    Color.FromArgb(246,221,225), // #ffcae0
+                    Color.FromArgb(253,255,200), // #d7bfda
+                    Color.FromArgb(216,255,220), // #bec7e3
+                    Color.FromArgb(213,238,255), // #8ecdd9
+                    Color.FromArgb(249,237,255) // #70c4c6
+                };
+
+                int index = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    Guna2Button btn = new Guna2Button
+                    {
+                        Text = row["tname"].ToString(),
+                        Size = new Size(175, 52),
+                        FillColor = colors[index % colors.Length],
+                        ForeColor = Color.Black,
+                        Font = new Font("Gill Sans Nova", 10, FontStyle.Regular),
+                        Margin = new Padding(12),
+                        BorderThickness = 0, // Removes the border
+                        HoverState = { FillColor = Color.FromArgb(224, 224, 224) } // Changes color on hover
+                    };
+
+                    btn.Click += TableButton_Click;
+                    flowLayoutPanel1.Controls.Add(btn);
+
+                    index++;
+                }
+            }
+        }
+
+        
+            private void TableButton_Click(object sender, EventArgs e)
+            {
+                Guna2Button btn = sender as Guna2Button;
+                SelectedTableName = btn.Text;
+                DialogResult = DialogResult.OK; // Set the DialogResult to OK when a table is successfully selected
+                this.Close(); // Close the form after selection
+            }
+
+        
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+            // This method can remain empty unless you need to perform custom painting.
+        }
+
+        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        public string SelectedTableName { get; private set; }
+        
+
+        private void kitchenbutton_Click(object sender, EventArgs e)
+        {
+            frmTableSelect tableSelectForm = new frmTableSelect();
+            if (tableSelectForm.ShowDialog() == DialogResult.OK)
+            {
+                // Assume that frmTableSelect sets DialogResult to OK only upon successful selection
+                // and that it has a public property to get the selected table name
+                SelectedTableName = tableSelectForm.SelectedTableName;
+
+                // Now open the Waiter selection form
+                frmWaiterSelect();
+            }
+        }
+
+        private void frmWaiterSelect()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

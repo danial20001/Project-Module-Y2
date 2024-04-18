@@ -74,16 +74,17 @@ namespace Project_POS.Model
     {
         { "@Name", txtName.Text.Trim() },
         { "@Phone", txtPhone.Text.Trim() },
-        { "@Role", txtRole.Text.Trim() }
+        { "@Role", txtRole.Text.Trim() },
+        { "@ImagePath", lblImagePath.Text } // Add the image path to the parameters
     };
 
             if (id == 0) // Insert operation
             {
-                qry = "INSERT INTO staff (sName, sPhone, sRole) VALUES (@Name, @Phone, @Role);";
+                qry = "INSERT INTO staff (sName, sPhone, sRole, imagePath) VALUES (@Name, @Phone, @Role, @ImagePath);";
             }
             else // Update operation
             {
-                qry = "UPDATE staff SET sName = @Name, sPhone = @Phone, sRole = @Role WHERE staffID = @id;";
+                qry = "UPDATE staff SET sName = @Name, sPhone = @Phone, sRole = @Role, imagePath = @ImagePath WHERE staffID = @id;";
                 parameters.Add("@id", id);
             }
 
@@ -99,9 +100,44 @@ namespace Project_POS.Model
             }
         }
 
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close(); // Simply closes the form
+        }
+
+        private void pictureBUTTON_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2PictureBox1_Click(object sender, EventArgs e)
+        {
+
+            
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.Title = "Select Image";
+                dlg.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    lblImagePath.Text = dlg.FileName; // Display the selected image path
+                }
+            
+
+
+        }
+
+
+        public void SetImagePath(string imagePath)
+        {
+            lblImagePath.Text = imagePath;  // Assuming lblImagePath is a label for displaying the image path
+        }
+
+
+        private void lblImagePath_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

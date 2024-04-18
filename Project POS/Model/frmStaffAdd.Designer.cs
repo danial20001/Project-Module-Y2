@@ -36,6 +36,10 @@
             this.txtRole = new Guna.UI2.WinForms.Guna2TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblImagePath = new System.Windows.Forms.Label();
+            this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
@@ -47,7 +51,7 @@
             this.btnClose.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnClose.ForeColor = System.Drawing.Color.Black;
-            this.btnClose.Location = new System.Drawing.Point(180, 255);
+            this.btnClose.Location = new System.Drawing.Point(180, 330);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(122, 42);
             this.btnClose.TabIndex = 7;
@@ -64,7 +68,7 @@
             this.btnSave.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnSave.ForeColor = System.Drawing.Color.Black;
-            this.btnSave.Location = new System.Drawing.Point(52, 255);
+            this.btnSave.Location = new System.Drawing.Point(52, 330);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(122, 42);
             this.btnSave.TabIndex = 6;
@@ -174,12 +178,51 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "Role";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label4.Location = new System.Drawing.Point(49, 247);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 15);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Picture";
+            // 
+            // lblImagePath
+            // 
+            this.lblImagePath.BackColor = System.Drawing.Color.DimGray;
+            this.lblImagePath.Font = new System.Drawing.Font("Gill Sans Nova Book", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblImagePath.ForeColor = System.Drawing.Color.White;
+            this.lblImagePath.Location = new System.Drawing.Point(52, 266);
+            this.lblImagePath.Name = "lblImagePath";
+            this.lblImagePath.Size = new System.Drawing.Size(204, 37);
+            this.lblImagePath.TabIndex = 14;
+            this.lblImagePath.Text = "label5";
+            this.lblImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblImagePath.Click += new System.EventHandler(this.lblImagePath_Click);
+            // 
+            // guna2PictureBox1
+            // 
+            this.guna2PictureBox1.Image = global::Project_POS.Properties.Resources._129_1298323_upload_icon_upload_file_image_png;
+            this.guna2PictureBox1.ImageRotate = 0F;
+            this.guna2PictureBox1.Location = new System.Drawing.Point(262, 266);
+            this.guna2PictureBox1.Name = "guna2PictureBox1";
+            this.guna2PictureBox1.Size = new System.Drawing.Size(40, 37);
+            this.guna2PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.guna2PictureBox1.TabIndex = 15;
+            this.guna2PictureBox1.TabStop = false;
+            this.guna2PictureBox1.Click += new System.EventHandler(this.guna2PictureBox1_Click);
+            // 
             // frmStaffAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.ClientSize = new System.Drawing.Size(353, 369);
+            this.ClientSize = new System.Drawing.Size(359, 413);
+            this.Controls.Add(this.guna2PictureBox1);
+            this.Controls.Add(this.lblImagePath);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtRole);
@@ -193,6 +236,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmStaffAdd";
             this.Load += new System.EventHandler(this.frmStaffAdd_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,5 +252,8 @@
         public Guna.UI2.WinForms.Guna2TextBox txtRole;
         public System.Windows.Forms.Label label2;
         public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblImagePath;
+        private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox1;
     }
 }

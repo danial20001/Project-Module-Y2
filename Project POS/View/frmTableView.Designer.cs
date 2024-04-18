@@ -162,7 +162,7 @@
             this.dgvedit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.dgvedit.FillWeight = 20F;
             this.dgvedit.HeaderText = "";
-            this.dgvedit.Image = global::Project_POS.Properties.Resources.pngtree_white_edit_icon_image_1338673;
+            this.dgvedit.Image = global::Project_POS.Properties.Resources.circle_edit_line_icon_icons_com_66940;
             this.dgvedit.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dgvedit.MinimumWidth = 50;
             this.dgvedit.Name = "dgvedit";
@@ -174,7 +174,7 @@
             this.dgvdel.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.dgvdel.FillWeight = 20F;
             this.dgvdel.HeaderText = "";
-            this.dgvdel.Image = global::Project_POS.Properties.Resources._8367793;
+            this.dgvdel.Image = global::Project_POS.Properties.Resources._3807871;
             this.dgvdel.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dgvdel.MinimumWidth = 20;
             this.dgvdel.Name = "dgvdel";

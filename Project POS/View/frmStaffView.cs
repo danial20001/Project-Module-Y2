@@ -1,4 +1,5 @@
-﻿using Project_POS.Model;
+﻿using MySql.Data.MySqlClient;
+using Project_POS.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,41 +63,64 @@ namespace Project_POS.View
         {
             if (guna2DataGridView1.Columns[e.ColumnIndex].Name == "dgvedit")
             {
-                // Assuming there's a form called frmStaffAdd for editing which has similar functionality.
-                frmStaffAdd frm = new frmStaffAdd();
-                frm.StartPosition = FormStartPosition.CenterParent;
-                frm.id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["dgvID"].Value); // Assuming 'dgvID' is the cell name for staff IDs.
-                frm.txtName.Text = Convert.ToString(guna2DataGridView1.CurrentRow.Cells["dgvName"].Value);
-                frm.txtPhone.Text = Convert.ToString(guna2DataGridView1.CurrentRow.Cells["dgvPhone"].Value);
-                frm.txtRole.Text = Convert.ToString(guna2DataGridView1.CurrentRow.Cells["dgvRole"].Value);
-                if (frm.ShowDialog() == DialogResult.OK)
+                int id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["dgvID"].Value);
+                // Define the query to fetch all necessary details including the image path
+                string qry = "SELECT sName, sPhone, sRole, imagePath FROM staff WHERE staffID = @id";
+
+                using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
                 {
-                    GetData();
+                    con.Open();
+                    MySqlCommand cmd = new MySqlCommand(qry, con);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+                            frmStaffAdd frm = new frmStaffAdd();
+                            frm.StartPosition = FormStartPosition.CenterParent;
+                            frm.id = id;
+                            frm.txtName.Text = row["sName"].ToString();
+                            frm.txtPhone.Text = row["sPhone"].ToString();
+                            frm.txtRole.Text = row["sRole"].ToString();
+                            frm.SetImagePath(row["imagePath"].ToString());  // Assuming SetImagePath is a method in frmStaffAdd
+                            if (frm.ShowDialog() == DialogResult.OK)
+                            {
+                                GetData();
+                            }
+                        }
+                    }
                 }
             }
             else if (guna2DataGridView1.Columns[e.ColumnIndex].Name == "dgvdel")
             {
-                // Confirm before deleting
                 DialogResult result = MessageBox.Show("Are you sure you want to delete this staff member?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     int id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["dgvID"].Value);
                     string qry = "DELETE FROM staff WHERE staffID = @id";
-                    Dictionary<string, object> parameters = new Dictionary<string, object> { { "@id", id } };
-
-                    if (Database.ExecuteSQL(qry, parameters) > 0)
+                    using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
                     {
-                        MessageBox.Show("Deleted successfully");
+                        con.Open();
+                        MySqlCommand cmd = new MySqlCommand(qry, con);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Deleted successfully");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Deletion failed");
+                        }
+                        GetData();
                     }
-                    else
-                    {
-                        MessageBox.Show("Deletion failed");
-                    }
-                    GetData();
                 }
             }
         }
-        
+
+
 
         private void btnAdd_Click(object sender, EventArgs e)
         {

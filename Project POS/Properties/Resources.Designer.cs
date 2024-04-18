@@ -63,6 +63,16 @@ namespace Project_POS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _129_1298323_upload_icon_upload_file_image_png {
+            get {
+                object obj = ResourceManager.GetObject("129-1298323_upload-icon-upload-file-image-png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _3703059_middle {
             get {
                 object obj = ResourceManager.GetObject("3703059-middle", resourceCulture);
@@ -143,6 +153,16 @@ namespace Project_POS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap comvecteezy423426 {
+            get {
+                object obj = ResourceManager.GetObject("comvecteezy423426", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap delete_icon_1864x2048_bp2i0gor {
             get {
                 object obj = ResourceManager.GetObject("delete-icon-1864x2048-bp2i0gor", resourceCulture);
@@ -166,6 +186,16 @@ namespace Project_POS.Properties {
         internal static System.Drawing.Bitmap images {
             get {
                 object obj = ResourceManager.GetObject("images", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pngtree_file_upload_icon_image_1344464 {
+            get {
+                object obj = ResourceManager.GetObject("pngtree-file-upload-icon-image_1344464", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
