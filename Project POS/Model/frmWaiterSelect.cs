@@ -23,6 +23,21 @@ namespace Project_POS.Model
 
         }
 
+        public string SelectedWaiterName { get; private set; }
+
+        private void ucWaiter_Click(object sender, EventArgs e)
+        {
+            ucWaiter selectedWaiter = sender as ucWaiter;
+            if (selectedWaiter != null)
+            {
+                SelectedWaiterName = selectedWaiter.WaiterName;
+                SelectedWaiterImage = selectedWaiter.WaiterImage; // Make sure ucWaiter has a public property for the image
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
+
         private void frmWaiterSelect_Load(object sender, EventArgs e)
         {
             LoadWaiters();
@@ -30,48 +45,41 @@ namespace Project_POS.Model
 
         private void LoadWaiters()
         {
-            string qry = "SELECT staffID, sName, imagePath FROM staff";  // Corrected table and column names
+            string qry = "SELECT staffID, sName, imagePath FROM staff";
             using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
                 MySqlCommand cmd = new MySqlCommand(qry, con);
-                try
-                {
-                    con.Open();  // Explicitly open the connection
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-                    if (dt.Rows.Count == 0)
-                    {
-                        MessageBox.Show("No staff found.");
-                        return;
-                    }
-
-                    WaiterPanel.Controls.Clear();
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        try
-                        {
-                            ucWaiter waiter = new ucWaiter
-                            {
-                                WaiterId = Convert.ToInt32(row["staffID"]),
-                                WaiterName = row["sName"].ToString(),
-                                WaiterImage = Image.FromFile(row["imagePath"].ToString()) // Make sure the image path is accessible
-                            };
-                            WaiterPanel.Controls.Add(waiter);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error loading image or adding waiter to panel: {ex.Message}");
-                        }
-                    }
-                }
-                catch (Exception ex)
+                WaiterPanel.Controls.Clear();
+                foreach (DataRow row in dt.Rows)
                 {
-                    MessageBox.Show($"Database connection or query error: {ex.Message}");
+                    ucWaiter waiter = new ucWaiter
+                    {
+                        WaiterId = Convert.ToInt32(row["staffID"]),
+                        WaiterName = row["sName"].ToString(),
+                        WaiterImage = Image.FromFile(row["imagePath"].ToString())
+                    };
+                    waiter.WaiterSelected += Waiter_Selected;
+                    WaiterPanel.Controls.Add(waiter);
                 }
             }
         }
+
+        private void Waiter_Selected(object sender, EventArgs e)
+        {
+            ucWaiter selectedWaiter = sender as ucWaiter;
+            if (selectedWaiter != null)
+            {
+                SelectedWaiterName = selectedWaiter.WaiterName;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
+        public Image SelectedWaiterImage { get; private set; }
 
 
 

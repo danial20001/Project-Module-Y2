@@ -30,7 +30,7 @@ namespace Project_POS.Model
             OrderType = "Takeout";
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        public void label1_Click(object sender, EventArgs e)
         {
 
         }
@@ -342,10 +342,59 @@ namespace Project_POS.Model
 
         private void kitchenbutton_Click(object sender, EventArgs e)
         {
+            frmTableSelect tableSelectForm = new frmTableSelect();
+            if (tableSelectForm.ShowDialog(this) == DialogResult.OK) // Ensures that the form was closed with OK
+            {
+                string selectedTable = tableSelectForm.SelectedTableName;
+                if (!string.IsNullOrEmpty(selectedTable))
+                {
+                    lblTable.Text = selectedTable;
+                    lblTable.Visible = true; // Make the label visible
+                    OpenWaiterSelect(); // Opens the waiter selection form
+                }
+                else
+                {
+                    MessageBox.Show("No table was selected.");
+                }
+            }
+        }
+
+
+
+        public void OpenWaiterSelect()
+        {
+            using (frmWaiterSelect waiterSelectForm = new frmWaiterSelect())
+            {
+                if (waiterSelectForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    lblWaiter.Text = waiterSelectForm.SelectedWaiterName;
+                    lblWaiter.Visible = true;
+
+                    if (waiterSelectForm.SelectedWaiterImage != null)
+                    {
+                        guna2CirclePictureBox1.Image = waiterSelectForm.SelectedWaiterImage;
+                        guna2CirclePictureBox1.Visible = true;
+                    }
+                    
+                }
+            }
+        }
+
+
+
+
+
+        private void lblWaiter_Click(object sender, EventArgs e)
+        {
 
         }
 
-        private void lblWaiter_Click(object sender, EventArgs e)
+        private void guna2CirclePictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }

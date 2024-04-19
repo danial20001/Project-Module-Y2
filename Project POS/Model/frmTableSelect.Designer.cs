@@ -74,6 +74,7 @@
             this.Controls.Add(this.guna2Panel1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "frmTableSelect";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmTableSelect";
             this.Load += new System.EventHandler(this.frmTableSelect_Load);
             this.guna2Panel1.ResumeLayout(false);

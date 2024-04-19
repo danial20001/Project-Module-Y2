@@ -40,7 +40,7 @@ namespace Project_POS
             };
 
             // Run the login form
-            Application.Run(new frmWaiterSelect());
+            Application.Run(new frmPOS());
         }
     }
 }

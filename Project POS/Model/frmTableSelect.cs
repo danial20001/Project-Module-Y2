@@ -15,16 +15,9 @@ namespace Project_POS.Model
 {
     public partial class frmTableSelect : Form
     {
-        private frmPOS parentForm;  // This will hold the reference to the frmPOS
-
-        public frmTableSelect(frmPOS parent)  // Constructor that accepts frmPOS
-        {
-            InitializeComponent();
-            parentForm = parent;  // Store the reference to the frmPOS instance
-        }
-
         public frmTableSelect()
         {
+            InitializeComponent();
         }
 
         private void frmTableSelect_Load(object sender, EventArgs e)
@@ -77,16 +70,19 @@ namespace Project_POS.Model
             }
         }
 
-        
-            private void TableButton_Click(object sender, EventArgs e)
-            {
-                Guna2Button btn = sender as Guna2Button;
-                SelectedTableName = btn.Text;
-                DialogResult = DialogResult.OK; // Set the DialogResult to OK when a table is successfully selected
-                this.Close(); // Close the form after selection
-            }
 
-        
+        public string SelectedTableName { get; private set; }
+
+        private void TableButton_Click(object sender, EventArgs e)
+        {
+            Guna2Button btn = sender as Guna2Button;
+            SelectedTableName = btn.Text;  // Assuming you have a property to hold the selected table name
+            this.DialogResult = DialogResult.OK;  // Set the dialog result to OK
+            this.Close();  // Close the form
+        }
+
+
+
 
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -98,26 +94,6 @@ namespace Project_POS.Model
 
         }
 
-        public string SelectedTableName { get; private set; }
-        
-
-        private void kitchenbutton_Click(object sender, EventArgs e)
-        {
-            frmTableSelect tableSelectForm = new frmTableSelect();
-            if (tableSelectForm.ShowDialog() == DialogResult.OK)
-            {
-                // Assume that frmTableSelect sets DialogResult to OK only upon successful selection
-                // and that it has a public property to get the selected table name
-                SelectedTableName = tableSelectForm.SelectedTableName;
-
-                // Now open the Waiter selection form
-                frmWaiterSelect();
-            }
-        }
-
-        private void frmWaiterSelect()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
