@@ -135,7 +135,8 @@ namespace Project_POS.Model
             bool found = false;
             foreach (DataGridViewRow row in guna2DataGridView1.Rows)
             {
-                if (Convert.ToInt32(row.Cells["dgvid"].Value) == product.id)
+                // Make sure you are using the correct column name here for pID
+                if (Convert.ToInt32(row.Cells["dgvpID"].Value) == product.id)
                 {
                     // Product exists, increase quantity
                     int qty = Convert.ToInt32(row.Cells["dgvQty"].Value) + 1;
@@ -149,18 +150,22 @@ namespace Project_POS.Model
             if (!found)
             {
                 // Product does not exist, add a new row
-                guna2DataGridView1.Rows.Add(new object[] {
+                int rowIndex = guna2DataGridView1.Rows.Add(new object[] {
             guna2DataGridView1.Rows.Count + 1, // Assuming first column is a row number which auto-increments
-            product.id,
+            product.id, // Make sure this is the pID from the products table
             product.PName,
             1, // Quantity
             product.PPrice,
             product.PPrice // Initial amount is just the price as quantity is 1
         });
+
+                // Explicitly set the pID in case the above isn't working
+                guna2DataGridView1.Rows[rowIndex].Cells["dgvpID"].Value = product.id;
             }
 
             UpdateTotal();  // Update the total whenever products are added or quantities are changed
         }
+
 
         //getting product from database
 
@@ -456,15 +461,15 @@ namespace Project_POS.Model
                     {
                         if (!row.IsNewRow)
                         {
-                            int proID = Convert.ToInt32(row.Cells["dgvproID"].Value);
+                            int proID = Convert.ToInt32(row.Cells["dgvpID"].Value);
                             int qty = Convert.ToInt32(row.Cells["dgvQty"].Value);
                             float price = Convert.ToSingle(row.Cells["dgvPrice"].Value);
                             float amount = Convert.ToSingle(row.Cells["dgvAmount"].Value);
 
-                            cmd.CommandText = "INSERT INTO tblDetails (MainID, ProID, Qty, Price, Amount) VALUES (@MainID, @ProID, @Qty, @Price, @Amount);";
+                            cmd.CommandText = "INSERT INTO tblDetails (MainID, pID, Qty, Price, Amount) VALUES (@MainID, @pID, @Qty, @Price, @Amount);";
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@MainID", mainID);
-                            cmd.Parameters.AddWithValue("@ProID", proID);
+                            cmd.Parameters.AddWithValue("@pID", proID);
                             cmd.Parameters.AddWithValue("@Qty", qty);
                             cmd.Parameters.AddWithValue("@Price", price);
                             cmd.Parameters.AddWithValue("@Amount", amount);
@@ -490,7 +495,6 @@ namespace Project_POS.Model
             frmBillList billListForm = new frmBillList();  // Create an instance of frmBillList
             billListForm.ShowDialog(this);  // Open it as a modal dialog relative to the current form
         }
-
 
 
     }
