@@ -18,8 +18,15 @@ namespace Project_POS.Model
         {
             InitializeComponent();
             guna2DataGridView1.CellClick += guna2DataGridView1_CellClick;
-
+            this.guna2Button5.Click += new System.EventHandler(this.guna2Button5_Click);
+            
         }
+
+
+
+
+
+
 
         private void guna2Button7_Click(object sender, EventArgs e)
         {
@@ -94,7 +101,7 @@ namespace Project_POS.Model
             }
         }
 
-
+        //I made a change here and added String proID , which is a colum in both 
         private void AddItems(string id, string name, string cat, string price)
         {
             double productPrice;
@@ -398,5 +405,96 @@ namespace Project_POS.Model
         {
 
         }
+
+        private void guna2Button5_Click(object sender, EventArgs e)
+        {
+            string tableName = lblTable.Text;
+            string waiterName = lblWaiter.Text;
+            string status = "Pending"; // Default status, can be adjusted based on your application logic
+            string orderType = OrderType;
+
+            // Remove the "Total: £" part to isolate the number and try parsing it
+            string totalString = lblTotal.Text.Replace("Total: £", "").Trim();
+            if (!float.TryParse(totalString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float total))
+            {
+                MessageBox.Show("Invalid total format.");
+                return; // Exit if parsing fails
+            }
+
+            float received = 0.0f; // Placeholder, modify as necessary
+            float change = 0.0f; // Placeholder, modify as necessary
+
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = con;
+
+                // Start transaction
+                MySqlTransaction trans = con.BeginTransaction();
+                cmd.Transaction = trans;
+
+                try
+                {
+                    // Insert into tbMain
+                    cmd.CommandText = "INSERT INTO `tbMain` (`aDate`, `aTime`, `TableName`, `WaiterName`, `Status`, `OrderType`, `Total`, `Received`, `Change`) VALUES (CURDATE(), CURTIME(), @TableName, @WaiterName, @Status, @OrderType, @Total, @Received, @Change);";
+
+                    cmd.Parameters.AddWithValue("@TableName", tableName);
+                    cmd.Parameters.AddWithValue("@WaiterName", waiterName);
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@OrderType", orderType);
+                    cmd.Parameters.AddWithValue("@Total", total);
+                    cmd.Parameters.AddWithValue("@Received", received);
+                    cmd.Parameters.AddWithValue("@Change", change);
+                    cmd.ExecuteNonQuery();
+
+                    // Get the last inserted id
+                    long mainID = cmd.LastInsertedId;
+
+                    // Insert into tblDetails
+                    foreach (DataGridViewRow row in guna2DataGridView1.Rows)
+                    {
+                        if (!row.IsNewRow)
+                        {
+                            int proID = Convert.ToInt32(row.Cells["dgvproID"].Value);
+                            int qty = Convert.ToInt32(row.Cells["dgvQty"].Value);
+                            float price = Convert.ToSingle(row.Cells["dgvPrice"].Value);
+                            float amount = Convert.ToSingle(row.Cells["dgvAmount"].Value);
+
+                            cmd.CommandText = "INSERT INTO tblDetails (MainID, ProID, Qty, Price, Amount) VALUES (@MainID, @ProID, @Qty, @Price, @Amount);";
+                            cmd.Parameters.Clear();
+                            cmd.Parameters.AddWithValue("@MainID", mainID);
+                            cmd.Parameters.AddWithValue("@ProID", proID);
+                            cmd.Parameters.AddWithValue("@Qty", qty);
+                            cmd.Parameters.AddWithValue("@Price", price);
+                            cmd.Parameters.AddWithValue("@Amount", amount);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Commit transaction
+                    trans.Commit();
+                    MessageBox.Show("Order saved successfully!");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong, rollback
+                    trans.Rollback();
+                    MessageBox.Show("Failed to save the order. Error: " + ex.Message);
+                }
+            }
+        }
+
+        private void guna2Button4_Click(object sender, EventArgs e)
+        {
+            frmBillList billListForm = new frmBillList();  // Create an instance of frmBillList
+            billListForm.ShowDialog(this);  // Open it as a modal dialog relative to the current form
+        }
+
+
+
     }
 }
+
+
+

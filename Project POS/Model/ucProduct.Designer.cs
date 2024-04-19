@@ -46,9 +46,9 @@
             // 
             this.lblName.Font = new System.Drawing.Font("Gill Sans MT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.ForeColor = System.Drawing.Color.White;
-            this.lblName.Location = new System.Drawing.Point(16, 0);
+            this.lblName.Location = new System.Drawing.Point(12, 0);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(161, 68);
+            this.lblName.Size = new System.Drawing.Size(199, 68);
             this.lblName.TabIndex = 1;
             this.lblName.Text = "Coca-Cola";
             this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,7 +62,7 @@
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.guna2VSeparator1);
             this.Name = "ucProduct";
-            this.Size = new System.Drawing.Size(177, 68);
+            this.Size = new System.Drawing.Size(211, 68);
             this.ResumeLayout(false);
 
         }
