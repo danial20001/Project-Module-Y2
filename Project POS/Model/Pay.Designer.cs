@@ -99,6 +99,7 @@
             this.Controls.Add(this.txtAmount);
             this.Controls.Add(this.lblTotal);
             this.Name = "Pay";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Pay";
             this.ResumeLayout(false);
             this.PerformLayout();
