@@ -135,7 +135,7 @@
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
             this.dgvBillList.RowsDefaultCellStyle = dataGridViewCellStyle5;
-            this.dgvBillList.Size = new System.Drawing.Size(1150, 699);
+            this.dgvBillList.Size = new System.Drawing.Size(1150, 664);
             this.dgvBillList.TabIndex = 11;
             this.dgvBillList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dgvBillList.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -158,7 +158,7 @@
             this.dgvBillList.ThemeStyle.RowsStyle.Height = 22;
             this.dgvBillList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.dgvBillList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.White;
-            this.dgvBillList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBillList_CellContentClick);
+            
             // 
             // dgvSno
             // 

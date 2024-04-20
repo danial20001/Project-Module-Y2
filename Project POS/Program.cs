@@ -40,7 +40,7 @@ namespace Project_POS
             };
 
             // Run the login form
-            Application.Run(new frmBillList());
+            Application.Run(new frmPOS());
         }
     }
 }

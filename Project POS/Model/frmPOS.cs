@@ -28,10 +28,120 @@ namespace Project_POS.Model
         {
             if (mainID.HasValue)
             {
+
                 lblMainID.Text = $"Main ID: {mainID.Value}"; // Display MainID
                 LoadOrder(mainID.Value);
+                LoadWaiterName(mainID.Value);
+                LoadTableName(mainID.Value);    
+                LoadTotalAmount(mainID.Value);
             }
         }
+
+        public void LoadOrderDetails(int mainID)
+        {
+            // Ensure this function can be called from frmBillList
+            LoadOrder(mainID);
+            LoadWaiterName(mainID);
+            LoadTableName(mainID);
+            LoadTotalAmount(mainID);
+        }
+
+        public void OpenBillList()
+        {
+            frmBillList billList = new frmBillList(this); // Pass 'this' reference to frmBillList
+            billList.ShowDialog();
+        }
+
+
+        private void LoadWaiterName(int mainID)
+        {
+            string query = "SELECT WaiterName FROM tbMain WHERE MainID = @MainID";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(Database.ConnectionString))
+                {
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@MainID", mainID);
+
+                    var result = command.ExecuteScalar();
+                    if (result != null && result.ToString() != "")
+                    {
+                        lblWaiter.Text = $"{result.ToString()}";
+                        lblWaiter.Visible = true;  // Make the label visible if there is a valid waiter name
+                    }
+                    else
+                    {
+                        lblWaiter.Text = "Waiter: Not assigned";
+                        lblWaiter.Visible = false; // Hide the label if no valid waiter name is found
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading waiter name: {ex.Message}");
+            }
+        }
+
+        private void LoadTableName(int mainID)
+        {
+            string query = "SELECT TableName FROM tbMain WHERE MainID = @MainID";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(Database.ConnectionString))
+                {
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@MainID", mainID);
+
+                    var result = command.ExecuteScalar();
+                    if (result != null && result.ToString() != "")
+                    {
+                        lblTable.Text = $"{result.ToString()}";
+                        lblTable.Visible = true;  // Make the label visible if there is a valid table name
+                    }
+                    else
+                    {
+                        lblTable.Text = "Table: Not assigned";
+                        lblTable.Visible = false; // Hide the label if no valid table name is found
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading table name: {ex.Message}");
+            }
+        }
+
+        private void LoadTotalAmount(int mainID)
+        {
+            string query = "SELECT Total FROM tbMain WHERE MainID = @MainID";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(Database.ConnectionString))
+                {
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@MainID", mainID);
+
+                    var result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        lblTotal.Text = $"Total: ${Convert.ToDecimal(result):F2}";
+                    }
+                    else
+                    {
+                        lblTotal.Text = "Total: $0.00";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading total amount: {ex.Message}");
+            }
+        }
+
+
 
         private void LoadItemToDataGridView(string id, string name, int qty, string price)
         {
