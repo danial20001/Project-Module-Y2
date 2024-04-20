@@ -532,10 +532,9 @@ namespace Project_POS.Model
         {
             string tableName = lblTable.Text;
             string waiterName = lblWaiter.Text;
-            string status = "Pending"; // Default status, can be adjusted based on your application logic
+            string status = "Pending";
             string orderType = OrderType;
 
-            // Remove the "Total: £" part to isolate the number and try parsing it
             string totalString = lblTotal.Text.Replace("Total: £", "").Trim();
             if (!float.TryParse(totalString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float total))
             {
@@ -543,37 +542,36 @@ namespace Project_POS.Model
                 return; // Exit if parsing fails
             }
 
-            float received = 0.0f; // Placeholder, modify as necessary
-            float change = 0.0f; // Placeholder, modify as necessary
-
             using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = con;
-
-                // Start transaction
                 MySqlTransaction trans = con.BeginTransaction();
                 cmd.Transaction = trans;
 
                 try
                 {
-                    // Insert into tbMain
-                    cmd.CommandText = "INSERT INTO `tbMain` (`aDate`, `aTime`, `TableName`, `WaiterName`, `Status`, `OrderType`, `Total`, `Received`, `Change`) VALUES (CURDATE(), CURTIME(), @TableName, @WaiterName, @Status, @OrderType, @Total, @Received, @Change);";
+                    if (lblMainID.Text != "No ID Loaded") // Check if updating an existing order
+                    {
+                        int existingMainID = int.Parse(lblMainID.Text.Replace("Main ID: ", ""));
+                        cmd.CommandText = "UPDATE `tbMain` SET `TableName`=@TableName, `WaiterName`=@WaiterName, `Status`=@Status, `OrderType`=@OrderType, `Total`=@Total WHERE `MainID`=@MainID;";
+                        cmd.Parameters.AddWithValue("@MainID", existingMainID);
+                    }
+                    else
+                    {
+                        cmd.CommandText = "INSERT INTO `tbMain` (`aDate`, `aTime`, `TableName`, `WaiterName`, `Status`, `OrderType`, `Total`) VALUES (CURDATE(), CURTIME(), @TableName, @WaiterName, @Status, @OrderType, @Total);";
+                    }
 
                     cmd.Parameters.AddWithValue("@TableName", tableName);
                     cmd.Parameters.AddWithValue("@WaiterName", waiterName);
                     cmd.Parameters.AddWithValue("@Status", status);
                     cmd.Parameters.AddWithValue("@OrderType", orderType);
                     cmd.Parameters.AddWithValue("@Total", total);
-                    cmd.Parameters.AddWithValue("@Received", received);
-                    cmd.Parameters.AddWithValue("@Change", change);
                     cmd.ExecuteNonQuery();
 
-                    // Get the last inserted id
-                    long mainID = cmd.LastInsertedId;
+                    long currentMainID = lblMainID.Text != "No ID Loaded" ? int.Parse(lblMainID.Text.Replace("Main ID: ", "")) : cmd.LastInsertedId;
 
-                    // Insert into tblDetails
                     foreach (DataGridViewRow row in guna2DataGridView1.Rows)
                     {
                         if (!row.IsNewRow)
@@ -583,9 +581,9 @@ namespace Project_POS.Model
                             float price = Convert.ToSingle(row.Cells["dgvPrice"].Value);
                             float amount = Convert.ToSingle(row.Cells["dgvAmount"].Value);
 
-                            cmd.CommandText = "INSERT INTO tblDetails (MainID, pID, Qty, Price, Amount) VALUES (@MainID, @pID, @Qty, @Price, @Amount);";
                             cmd.Parameters.Clear();
-                            cmd.Parameters.AddWithValue("@MainID", mainID);
+                            cmd.CommandText = "INSERT INTO tblDetails (MainID, pID, Qty, Price, Amount) VALUES (@MainID, @pID, @Qty, @Price, @Amount);";
+                            cmd.Parameters.AddWithValue("@MainID", currentMainID);
                             cmd.Parameters.AddWithValue("@pID", proID);
                             cmd.Parameters.AddWithValue("@Qty", qty);
                             cmd.Parameters.AddWithValue("@Price", price);
@@ -593,19 +591,18 @@ namespace Project_POS.Model
                             cmd.ExecuteNonQuery();
                         }
                     }
-
-                    // Commit transaction
                     trans.Commit();
                     MessageBox.Show("Order saved successfully!");
                 }
                 catch (Exception ex)
                 {
-                    // Something went wrong, rollback
                     trans.Rollback();
                     MessageBox.Show("Failed to save the order. Error: " + ex.Message);
                 }
             }
         }
+
+
 
         private void guna2Button4_Click(object sender, EventArgs e)
         {
@@ -668,9 +665,10 @@ namespace Project_POS.Model
 
         }
 
+        private void lblMainID_Click(object sender, EventArgs e)
+        {
 
-
-
+        }
     }
 }
 
