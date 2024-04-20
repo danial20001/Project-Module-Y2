@@ -42,6 +42,7 @@
             this.dgvWaiter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvOrderType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvedit = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvBill = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBillList)).BeginInit();
@@ -105,6 +106,7 @@
             this.dgvWaiter,
             this.dgvOrderType,
             this.dgvStatus,
+            this.dgvTotal,
             this.dgvedit,
             this.dgvBill});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -207,6 +209,12 @@
             this.dgvStatus.ReadOnly = true;
             this.dgvStatus.Width = 200;
             // 
+            // dgvTotal
+            // 
+            this.dgvTotal.HeaderText = "Column1";
+            this.dgvTotal.Name = "dgvTotal";
+            this.dgvTotal.ReadOnly = true;
+            // 
             // dgvedit
             // 
             this.dgvedit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -258,6 +266,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvWaiter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvOrderType;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvTotal;
         private System.Windows.Forms.DataGridViewImageColumn dgvedit;
         private System.Windows.Forms.DataGridViewImageColumn dgvBill;
     }

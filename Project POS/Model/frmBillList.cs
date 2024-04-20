@@ -25,33 +25,61 @@ namespace Project_POS.Model
         }
 
 
-        private void LoadBillList()
-        {
-            string qry = "SELECT MainID, TableName, WaiterName, OrderType, Status FROM tbMain ORDER BY MainID DESC;";
-            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+       
+
+            private void LoadBillList()
             {
-                con.Open();
-                using (MySqlCommand cmd = new MySqlCommand(qry, con))
+                // SQL query to fetch required fields including Total directly from tbMain
+                string qry = @"
+        SELECT 
+            MainID, 
+            TableName, 
+            WaiterName, 
+            OrderType, 
+            Status, 
+            Total  -- Assuming Total is also a column in tbMain
+        FROM tbMain
+        ORDER BY MainID DESC;";
+
+                using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
                 {
-                    DataTable dt = new DataTable();
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    da.Fill(dt);
-
-                    dgvBillList.Rows.Clear();
-
-                    foreach (DataRow row in dt.Rows)
+                    con.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, con))
                     {
-                        int rowIndex = dgvBillList.Rows.Add();
-                        dgvBillList.Rows[rowIndex].Cells["dgvMainID"].Value = row["MainID"];
-                        dgvBillList.Rows[rowIndex].Cells["dgvTable"].Value = row["TableName"];
-                        dgvBillList.Rows[rowIndex].Cells["dgvWaiter"].Value = row["WaiterName"];
-                        dgvBillList.Rows[rowIndex].Cells["dgvOrderType"].Value = row["OrderType"];
-                        dgvBillList.Rows[rowIndex].Cells["dgvStatus"].Value = row["Status"];
-                        // Assume you have dgvEdit and dgvDelete buttons setup either in designer or in code
+                        DataTable dt = new DataTable();
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                        dgvBillList.Rows.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            int rowIndex = dgvBillList.Rows.Add();
+                            dgvBillList.Rows[rowIndex].Cells["dgvMainID"].Value = row["MainID"];
+                            dgvBillList.Rows[rowIndex].Cells["dgvTable"].Value = row["TableName"];
+                            dgvBillList.Rows[rowIndex].Cells["dgvWaiter"].Value = row["WaiterName"];
+                            dgvBillList.Rows[rowIndex].Cells["dgvOrderType"].Value = row["OrderType"];
+                            dgvBillList.Rows[rowIndex].Cells["dgvStatus"].Value = row["Status"];
+                            dgvBillList.Rows[rowIndex].Cells["dgvTotal"].Value = row["Total"]; // Ensure you have a dgvTotal column in your DataGridView
+                        }
                     }
                 }
             }
+
+        private void ShowPayForm(int mainID, decimal totalAmount)
+        {
+            Pay payForm = new Pay(mainID, totalAmount);
+            payForm.UpdateEvent += PayForm_UpdateEvent;  // Subscribe to the event
+            payForm.ShowDialog();
         }
+
+        private void PayForm_UpdateEvent(object sender, EventArgs e)
+        {
+            LoadBillList();  // Refresh the DataGridView
+        }
+
+      
+
 
         private void dgvBillList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -62,7 +90,7 @@ namespace Project_POS.Model
                 // You can call another form or method here and pass 'mainID' to load the specific order
             }
         }
-
+        
 
 
         private void dgvBillList_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -73,7 +101,15 @@ namespace Project_POS.Model
                 frmPOS posForm = new frmPOS(mainID);
                 posForm.ShowDialog();  // This opens the frmPOS form for editing the selected record
             }
+            if (e.RowIndex >= 0 && dgvBillList.Columns[e.ColumnIndex].Name == "dgvBill")
+            {
+                int mainID = Convert.ToInt32(dgvBillList.Rows[e.RowIndex].Cells["dgvMainID"].Value);
+                decimal totalAmount = Convert.ToDecimal(dgvBillList.Rows[e.RowIndex].Cells["dgvTotal"].Value); // Make sure you have a column dgvTotal
+                Pay payForm = new Pay(mainID, totalAmount);
+                payForm.ShowDialog();
+            }
         }
+
 
 
     }
