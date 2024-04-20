@@ -9,37 +9,92 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+
 
 namespace Project_POS.Model
 {
     public partial class frmPOS : Form
     {
+        private int? mainID;
         public frmPOS()
         {
             InitializeComponent();
             guna2DataGridView1.CellClick += guna2DataGridView1_CellClick;
             this.guna2Button5.Click += new System.EventHandler(this.guna2Button5_Click);
-            
+            lblMainID.Text = "No ID Loaded"; // Default text when no ID is passed
+        }
+        public frmPOS(int? mainID = null) : this() // Ensure base initialization is called
+        {
+            if (mainID.HasValue)
+            {
+                lblMainID.Text = $"Main ID: {mainID.Value}"; // Display MainID
+                LoadOrder(mainID.Value);
+            }
+        }
+
+        private void LoadItemToDataGridView(string id, string name, int qty, string price)
+        {
+            if (!decimal.TryParse(price, out decimal productPrice))
+            {
+                MessageBox.Show("Invalid price format");
+                return;
+            }
+
+            decimal amount = productPrice * qty; // Calculate the total amount
+
+            int rowIndex = guna2DataGridView1.Rows.Add();
+            DataGridViewRow newRow = guna2DataGridView1.Rows[rowIndex];
+            newRow.Cells["dgvpID"].Value = id;
+            newRow.Cells["dgvName"].Value = name;
+            newRow.Cells["dgvQty"].Value = qty;
+            newRow.Cells["dgvPrice"].Value = productPrice;
+            newRow.Cells["dgvAmount"].Value = amount;
+        }
+
+        public void UpdateForm(int mainID)
+        {
+            LoadOrder(mainID);
+            this.BringToFront();
         }
 
 
-
-
-
-
-
-        private void guna2Button7_Click(object sender, EventArgs e)
+        private void LoadOrder(int mainID)
         {
-            lblTable.Text = "";
-            lblWaiter.Text = "";
-            lblTable.Visible = false;
-            lblWaiter.Visible = false;
-            OrderType = "Takeout";
-        }
+            string qry = "SELECT tblDetails.pID, products.pName, tblDetails.Qty, products.pPrice " +
+                         "FROM tblDetails " +
+                         "JOIN products ON tblDetails.pID = products.pID " +
+                         "WHERE tblDetails.MainID = @MainID;";
 
-        public void label1_Click(object sender, EventArgs e)
-        {
+            try
+            {
+                using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+                {
+                    con.Open();
+                    MySqlCommand cmd = new MySqlCommand(qry, con);
+                    cmd.Parameters.AddWithValue("@MainID", mainID);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        guna2DataGridView1.Rows.Clear();
 
+                        while (reader.Read())
+                        {
+                            LoadItemToDataGridView(
+                                reader["pID"].ToString(),
+                                reader["pName"].ToString(),
+                                Convert.ToInt32(reader["Qty"]),
+                                reader["pPrice"].ToString()
+                            );
+                        }
+
+                        guna2DataGridView1.Refresh();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading order data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void frmPOS_Load(object sender, EventArgs e)
@@ -102,7 +157,7 @@ namespace Project_POS.Model
         }
 
         //I made a change here and added String proID , which is a colum in both 
-        private void AddItems(string id, string name, string cat, string price)
+        private void AddItems(string id, string name, string cat, string price, int qty)
         {
             double productPrice;
             if (!double.TryParse(price, out productPrice))
@@ -116,7 +171,8 @@ namespace Project_POS.Model
                 PName = name,
                 PPrice = productPrice, // Ensure the price is parsed correctly
                 PCategory = cat,
-                id = int.Parse(id) // Safe parsing should be implemented
+                id = int.Parse(id), // Safe parsing should be implemented
+                Qty = qty  // Assuming there's a Qty property to set the quantity
             };
 
             // Attach the onSelect event handler
@@ -171,8 +227,7 @@ namespace Project_POS.Model
 
         private void LoadProducts()
         {
-
-            string qry = "SELECT * FROM products inner join category on catID = CategoryID";
+            string qry = "SELECT * FROM products INNER JOIN category ON catID = CategoryID";
             using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
                 MySqlCommand cmd = new MySqlCommand(qry, con);
@@ -183,19 +238,13 @@ namespace Project_POS.Model
                 ProductPanel.Controls.Clear();
                 foreach (DataRow item in dt.Rows)
                 {
-
+                    // Assuming default quantity is 1 for new products display
                     AddItems(item["pID"].ToString(), item["pName"].ToString(), item["catName"].ToString(),
-                        item["pPrice"].ToString());
-
-
+                             item["pPrice"].ToString(), 1);
                 }
             }
         }
 
-        private void CategoryPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void CategoryButton_Click(object sender, EventArgs e)
         {
@@ -209,47 +258,6 @@ namespace Project_POS.Model
             LoadProductsFilteredByCategory(button.Text);
         }
 
-
-        private void guna2Panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            // Retrieve the search text from the textbox
-            string searchText = txtSearch.Text.ToLower().Trim();
-
-            // Clear existing controls in the ProductPanel
-            ProductPanel.Controls.Clear();
-
-            // Reload and filter products based on the search text
-            LoadProductsFiltered(searchText);
-        }
-
-
-        private void LoadProductsFiltered(string searchText)
-        {
-            string qry = "SELECT * FROM products INNER JOIN category ON catID = CategoryID";
-            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
-            {
-                MySqlCommand cmd = new MySqlCommand(qry, con);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow item in dt.Rows)
-                {
-                    string productName = item["pName"].ToString();
-                    string productCategory = item["catName"].ToString();
-                    // Filter products based on name or category containing the search text
-                    if (productName.ToLower().Contains(searchText) || productCategory.ToLower().Contains(searchText))
-                    {
-                        AddItems(item["pID"].ToString(), productName, productCategory, item["pPrice"].ToString());
-                    }
-                }
-            }
-        }
 
 
         private void UpdateTotal()
@@ -269,20 +277,39 @@ namespace Project_POS.Model
             lblTotal.Text = $"Total: £{total:N2}";  // N2 formats the number as a currency with 2 decimal places
         }
 
-
-        private void label1_Click_1(object sender, EventArgs e)
+        private void LoadProductsFiltered(string searchText)
         {
+            string qry = "SELECT * FROM products INNER JOIN category ON catID = CategoryID";
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
+                foreach (DataRow item in dt.Rows)
+                {
+                    string productName = item["pName"].ToString();
+                    string productCategory = item["catName"].ToString();
+                    if (productName.ToLower().Contains(searchText) || productCategory.ToLower().Contains(searchText))
+                    {
+                        AddItems(item["pID"].ToString(), productName, productCategory, item["pPrice"].ToString(), 1);
+                    }
+                }
+            }
         }
 
-        private void lblTotal_Click(object sender, EventArgs e)
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
         {
+            // Retrieve the search text from the textbox
+            string searchText = txtSearch.Text.ToLower().Trim();
 
-        }
+            // Clear existing controls in the ProductPanel
+            ProductPanel.Controls.Clear();
 
-        private void guna2DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            // Reload and filter products based on the search text
+            LoadProductsFiltered(searchText);
         }
 
         private void guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -299,11 +326,6 @@ namespace Project_POS.Model
                     UpdateTotal();
                 }
             }
-        }
-
-        private void ProductPanel_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
 
@@ -325,10 +347,13 @@ namespace Project_POS.Model
                 ProductPanel.Controls.Clear();
                 foreach (DataRow item in dt.Rows)
                 {
-                    AddItems(item["pID"].ToString(), item["pName"].ToString(), item["catName"].ToString(), item["pPrice"].ToString());
+                    // Assuming the quantity for a newly displayed product is 1
+                    // Change this if you have a different default or if the UI should allow different initial quantities
+                    AddItems(item["pID"].ToString(), item["pName"].ToString(), item["catName"].ToString(), item["pPrice"].ToString(), 1);
                 }
             }
         }
+
         public int MainID = 0;
         private void guna2Button2_Click(object sender, EventArgs e)
         {
@@ -392,24 +417,6 @@ namespace Project_POS.Model
             }
         }
 
-
-
-
-
-        private void lblWaiter_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void guna2CirclePictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void guna2Button5_Click(object sender, EventArgs e)
         {
@@ -496,9 +503,67 @@ namespace Project_POS.Model
             billListForm.ShowDialog(this);  // Open it as a modal dialog relative to the current form
         }
 
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void lblWaiter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2CirclePictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ProductPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+        private void CategoryPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Button7_Click(object sender, EventArgs e)
+        {
+            lblTable.Text = "";
+            lblWaiter.Text = "";
+            lblTable.Visible = false;
+            lblWaiter.Visible = false;
+            OrderType = "Takeout";
+        }
+
+        public void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
 
     }
 }
+
 
 
 

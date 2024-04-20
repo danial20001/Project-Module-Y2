@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using System.Data;
 
+
 namespace Project_POS.Model
 {
     public partial class frmBillList : Form
@@ -11,7 +12,18 @@ namespace Project_POS.Model
         {
             InitializeComponent();
             LoadBillList();
+            dgvBillList.CellContentClick += dgvBillList_CellContentClick;  // Ensure this is hooked up either here or in the designer
         }
+
+        private frmPOS _existingPOSForm;
+
+        public frmBillList(frmPOS existingPOSForm)
+        {
+            InitializeComponent();
+            _existingPOSForm = existingPOSForm;
+            LoadBillList();
+        }
+
 
         private void LoadBillList()
         {
@@ -35,6 +47,7 @@ namespace Project_POS.Model
                         dgvBillList.Rows[rowIndex].Cells["dgvWaiter"].Value = row["WaiterName"];
                         dgvBillList.Rows[rowIndex].Cells["dgvOrderType"].Value = row["OrderType"];
                         dgvBillList.Rows[rowIndex].Cells["dgvStatus"].Value = row["Status"];
+                        // Assume you have dgvEdit and dgvDelete buttons setup either in designer or in code
                     }
                 }
             }
@@ -50,9 +63,18 @@ namespace Project_POS.Model
             }
         }
 
-        private void guna2DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+        private void dgvBillList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // This can remain empty unless you have specific logic for when a cell is clicked
+            if (e.RowIndex >= 0 && dgvBillList.Columns[e.ColumnIndex].Name == "dgvedit")
+            {
+                int mainID = Convert.ToInt32(dgvBillList.Rows[e.RowIndex].Cells["dgvMainID"].Value);
+                frmPOS posForm = new frmPOS(mainID);
+                posForm.ShowDialog();  // This opens the frmPOS form for editing the selected record
+            }
         }
+
+
     }
 }

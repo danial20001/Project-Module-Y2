@@ -72,6 +72,7 @@
             this.dgvDel = new System.Windows.Forms.DataGridViewImageColumn();
             this.dvgedit = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvpID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblMainID = new System.Windows.Forms.Label();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             this.guna2Panel5.SuspendLayout();
@@ -236,6 +237,7 @@
             // guna2Panel2
             // 
             this.guna2Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.guna2Panel2.Controls.Add(this.lblMainID);
             this.guna2Panel2.Controls.Add(this.guna2DataGridView1);
             this.guna2Panel2.Controls.Add(this.guna2Panel5);
             this.guna2Panel2.Controls.Add(this.lblTable);
@@ -660,6 +662,15 @@
             this.dgvpID.ReadOnly = true;
             this.dgvpID.Visible = false;
             // 
+            // lblMainID
+            // 
+            this.lblMainID.AutoSize = true;
+            this.lblMainID.Location = new System.Drawing.Point(105, 713);
+            this.lblMainID.Name = "lblMainID";
+            this.lblMainID.Size = new System.Drawing.Size(35, 13);
+            this.lblMainID.TabIndex = 9;
+            this.lblMainID.Text = "label1";
+            // 
             // frmPOS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -734,5 +745,6 @@
         private System.Windows.Forms.DataGridViewImageColumn dgvDel;
         private System.Windows.Forms.DataGridViewImageColumn dvgedit;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvpID;
+        private System.Windows.Forms.Label lblMainID;
     }
 }

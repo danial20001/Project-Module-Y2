@@ -170,6 +170,12 @@
     <Compile Include="Model\frmWaiterSelect.Designer.cs">
       <DependentUpon>frmWaiterSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Pay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\Pay.Designer.cs">
+      <DependentUpon>Pay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\SampleAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Model\frmWaiterSelect.resx">
       <DependentUpon>frmWaiterSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Pay.resx">
+      <DependentUpon>Pay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model\SampleAdd.resx">
       <DependentUpon>SampleAdd.cs</DependentUpon>

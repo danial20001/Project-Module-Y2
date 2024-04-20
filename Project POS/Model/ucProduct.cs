@@ -10,9 +10,20 @@ using System.Windows.Forms;
 
 namespace Project_POS.Model
 {
-    
+
     public partial class ucProduct : UserControl
     {
+        private int _qty;
+        public int Qty
+        {
+            get { return _qty; }
+            set
+            {
+                _qty = value;
+                
+            }
+        }
+
         public ucProduct()
         {
             InitializeComponent();
@@ -28,7 +39,6 @@ namespace Project_POS.Model
 
         public int id { get; set; }
         public double PPrice { get; set; }
-
         public string PCategory { get; set; }
 
         public string PName
@@ -37,4 +47,5 @@ namespace Project_POS.Model
             set { lblName.Text = value; }
         }
     }
+
 }
