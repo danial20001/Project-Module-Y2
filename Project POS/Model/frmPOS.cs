@@ -669,6 +669,16 @@ namespace Project_POS.Model
         {
 
         }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void guna2Separator2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

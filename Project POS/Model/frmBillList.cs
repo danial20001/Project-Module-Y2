@@ -25,46 +25,54 @@ namespace Project_POS.Model
         }
 
 
-       
 
-            private void LoadBillList()
+
+        private void LoadBillList()
+        {
+            // SQL query to fetch required fields including Total directly from tbMain
+            // Filter to show only entries where Status is 'Pending'
+            string qry = @"
+SELECT 
+    MainID, 
+    TableName, 
+    WaiterName, 
+    OrderType, 
+    Status, 
+    Total  -- Assuming Total is also a column in tbMain
+FROM tbMain
+WHERE Status = 'Pending'  -- Filter to include only pending statuses
+ORDER BY MainID DESC;";
+
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
-                // SQL query to fetch required fields including Total directly from tbMain
-                string qry = @"
-        SELECT 
-            MainID, 
-            TableName, 
-            WaiterName, 
-            OrderType, 
-            Status, 
-            Total  -- Assuming Total is also a column in tbMain
-        FROM tbMain
-        ORDER BY MainID DESC;";
-
-                using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+                con.Open();
+                using (MySqlCommand cmd = new MySqlCommand(qry, con))
                 {
-                    con.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(qry, con))
+                    DataTable dt = new DataTable();
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    da.Fill(dt);
+
+                    dgvBillList.Rows.Clear();
+
+                    if (dt.Rows.Count == 0)
                     {
-                        DataTable dt = new DataTable();
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dt);
+                        MessageBox.Show("No pending records found.");
+                        return; // Exit the function if no records are found
+                    }
 
-                        dgvBillList.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            int rowIndex = dgvBillList.Rows.Add();
-                            dgvBillList.Rows[rowIndex].Cells["dgvMainID"].Value = row["MainID"];
-                            dgvBillList.Rows[rowIndex].Cells["dgvTable"].Value = row["TableName"];
-                            dgvBillList.Rows[rowIndex].Cells["dgvWaiter"].Value = row["WaiterName"];
-                            dgvBillList.Rows[rowIndex].Cells["dgvOrderType"].Value = row["OrderType"];
-                            dgvBillList.Rows[rowIndex].Cells["dgvStatus"].Value = row["Status"];
-                            dgvBillList.Rows[rowIndex].Cells["dgvTotal"].Value = row["Total"]; // Ensure you have a dgvTotal column in your DataGridView
-                        }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        int rowIndex = dgvBillList.Rows.Add();
+                        dgvBillList.Rows[rowIndex].Cells["dgvMainID"].Value = row["MainID"];
+                        dgvBillList.Rows[rowIndex].Cells["dgvTable"].Value = row["TableName"];
+                        dgvBillList.Rows[rowIndex].Cells["dgvWaiter"].Value = row["WaiterName"];
+                        dgvBillList.Rows[rowIndex].Cells["dgvOrderType"].Value = row["OrderType"];
+                        dgvBillList.Rows[rowIndex].Cells["dgvStatus"].Value = row["Status"];
+                        dgvBillList.Rows[rowIndex].Cells["dgvTotal"].Value = row["Total"]; // Ensure you have a dgvTotal column in your DataGridView
                     }
                 }
             }
+        }
 
         private void ShowPayForm(int mainID, decimal totalAmount)
         {
@@ -110,7 +118,14 @@ namespace Project_POS.Model
             }
         }
 
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
+        private void dgvBillList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
     }
 }

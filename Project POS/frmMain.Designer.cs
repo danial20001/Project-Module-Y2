@@ -215,7 +215,7 @@
             this.kitchenbutton.Name = "kitchenbutton";
             this.kitchenbutton.Size = new System.Drawing.Size(67, 45);
             this.kitchenbutton.TabIndex = 7;
-            this.kitchenbutton.Text = "Kitchen";
+            this.kitchenbutton.Text = "Report";
             this.kitchenbutton.Click += new System.EventHandler(this.guna2Button9_Click);
             // 
             // guna2Button10

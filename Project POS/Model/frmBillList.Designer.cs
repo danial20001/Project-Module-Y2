@@ -34,7 +34,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
-            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.dgvBillList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.dgvSno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvMainID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,6 +42,7 @@
             this.dgvOrderType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvedit = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvBill = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBillList)).BeginInit();
@@ -57,27 +57,12 @@
             this.guna2Button2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.guna2Button2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button2.ForeColor = System.Drawing.Color.Black;
-            this.guna2Button2.Location = new System.Drawing.Point(600, 712);
+            this.guna2Button2.Location = new System.Drawing.Point(464, 712);
             this.guna2Button2.Name = "guna2Button2";
-            this.guna2Button2.Size = new System.Drawing.Size(122, 42);
+            this.guna2Button2.Size = new System.Drawing.Size(236, 42);
             this.guna2Button2.TabIndex = 9;
             this.guna2Button2.Text = "Close";
-            // 
-            // guna2Button1
-            // 
-            this.guna2Button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.guna2Button1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.guna2Button1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.guna2Button1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.guna2Button1.ForeColor = System.Drawing.Color.Black;
-            this.guna2Button1.Location = new System.Drawing.Point(472, 712);
-            this.guna2Button1.Name = "guna2Button1";
-            this.guna2Button1.Size = new System.Drawing.Size(122, 42);
-            this.guna2Button1.TabIndex = 8;
-            this.guna2Button1.Text = "Save";
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
             // dgvBillList
             // 
@@ -107,6 +92,7 @@
             this.dgvOrderType,
             this.dgvStatus,
             this.dgvTotal,
+            this.dgvTime,
             this.dgvedit,
             this.dgvBill});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -158,7 +144,7 @@
             this.dgvBillList.ThemeStyle.RowsStyle.Height = 22;
             this.dgvBillList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.dgvBillList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.White;
-            
+            this.dgvBillList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBillList_CellContentClick_1);
             // 
             // dgvSno
             // 
@@ -168,6 +154,7 @@
             this.dgvSno.MinimumWidth = 50;
             this.dgvSno.Name = "dgvSno";
             this.dgvSno.ReadOnly = true;
+            this.dgvSno.Visible = false;
             this.dgvSno.Width = 50;
             // 
             // dgvMainID
@@ -211,9 +198,16 @@
             // 
             // dgvTotal
             // 
-            this.dgvTotal.HeaderText = "Column1";
+            this.dgvTotal.HeaderText = "Total";
             this.dgvTotal.Name = "dgvTotal";
             this.dgvTotal.ReadOnly = true;
+            // 
+            // dgvTime
+            // 
+            this.dgvTime.HeaderText = "Time";
+            this.dgvTime.MinimumWidth = 20;
+            this.dgvTime.Name = "dgvTime";
+            this.dgvTime.ReadOnly = true;
             // 
             // dgvedit
             // 
@@ -247,7 +241,6 @@
             this.ClientSize = new System.Drawing.Size(1155, 766);
             this.Controls.Add(this.dgvBillList);
             this.Controls.Add(this.guna2Button2);
-            this.Controls.Add(this.guna2Button1);
             this.Name = "frmBillList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmBillList";
@@ -258,7 +251,6 @@
 
         #endregion
         public Guna.UI2.WinForms.Guna2Button guna2Button2;
-        public Guna.UI2.WinForms.Guna2Button guna2Button1;
         private Guna.UI2.WinForms.Guna2DataGridView dgvBillList;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvSno;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvMainID;
@@ -267,6 +259,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvOrderType;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvTotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvTime;
         private System.Windows.Forms.DataGridViewImageColumn dgvedit;
         private System.Windows.Forms.DataGridViewImageColumn dgvBill;
     }
