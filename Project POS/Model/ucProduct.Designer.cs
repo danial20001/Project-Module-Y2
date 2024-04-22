@@ -48,7 +48,7 @@
             this.lblName.ForeColor = System.Drawing.Color.White;
             this.lblName.Location = new System.Drawing.Point(12, 0);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(199, 68);
+            this.lblName.Size = new System.Drawing.Size(190, 68);
             this.lblName.TabIndex = 1;
             this.lblName.Text = "Coca-Cola";
             this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,7 +62,7 @@
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.guna2VSeparator1);
             this.Name = "ucProduct";
-            this.Size = new System.Drawing.Size(211, 68);
+            this.Size = new System.Drawing.Size(202, 68);
             this.ResumeLayout(false);
 
         }
