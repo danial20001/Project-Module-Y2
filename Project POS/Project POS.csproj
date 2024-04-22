@@ -192,6 +192,12 @@
     <Compile Include="Model\ucProduct.Designer.cs">
       <DependentUpon>ucProduct.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\ucTable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Model\ucTable.Designer.cs">
+      <DependentUpon>ucTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\ucWaiter.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -281,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Model\ucProduct.resx">
       <DependentUpon>ucProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\ucTable.resx">
+      <DependentUpon>ucTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model\ucWaiter.resx">
       <DependentUpon>ucWaiter.cs</DependentUpon>
