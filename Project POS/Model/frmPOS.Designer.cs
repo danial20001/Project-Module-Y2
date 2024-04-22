@@ -60,7 +60,6 @@
             this.guna2CirclePictureBox1 = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.guna2Panel3 = new Guna.UI2.WinForms.Guna2Panel();
             this.txtSearch = new Guna.UI2.WinForms.Guna2TextBox();
-            this.guna2Panel4 = new Guna.UI2.WinForms.Guna2Panel();
             this.CategoryPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.CategoryButton = new Guna.UI2.WinForms.Guna2Button();
             this.ProductPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -71,6 +70,7 @@
             this.guna2Separator3 = new Guna.UI2.WinForms.Guna2Separator();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2DataGridView1)).BeginInit();
@@ -221,7 +221,7 @@
             this.guna2Button8.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button8.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.guna2Button8.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.guna2Button8.Font = new System.Drawing.Font("Gill Sans Nova Book", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.guna2Button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2Button8.ForeColor = System.Drawing.Color.White;
             this.guna2Button8.Location = new System.Drawing.Point(194, 719);
             this.guna2Button8.Name = "guna2Button8";
@@ -420,7 +420,7 @@
             // 
             // lblTotal
             // 
-            this.lblTotal.Font = new System.Drawing.Font("Gill Sans Nova Book", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotal.ForeColor = System.Drawing.Color.White;
             this.lblTotal.Location = new System.Drawing.Point(200, 3);
             this.lblTotal.Name = "lblTotal";
@@ -433,11 +433,11 @@
             // lblTable
             // 
             this.lblTable.AutoSize = true;
-            this.lblTable.Font = new System.Drawing.Font("Gill Sans Nova Book", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTable.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.lblTable.Location = new System.Drawing.Point(10, 21);
             this.lblTable.Name = "lblTable";
-            this.lblTable.Size = new System.Drawing.Size(92, 33);
+            this.lblTable.Size = new System.Drawing.Size(104, 31);
             this.lblTable.TabIndex = 1;
             this.lblTable.Text = "Table 1";
             this.lblTable.Visible = false;
@@ -447,11 +447,11 @@
             // 
             this.lblWaiter.AutoSize = true;
             this.lblWaiter.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-            this.lblWaiter.Font = new System.Drawing.Font("Gill Sans Nova Book", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWaiter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWaiter.ForeColor = System.Drawing.SystemColors.AppWorkspace;
             this.lblWaiter.Location = new System.Drawing.Point(12, 54);
             this.lblWaiter.Name = "lblWaiter";
-            this.lblWaiter.Size = new System.Drawing.Size(53, 19);
+            this.lblWaiter.Size = new System.Drawing.Size(55, 20);
             this.lblWaiter.TabIndex = 2;
             this.lblWaiter.Text = "Waiter";
             this.lblWaiter.UseWaitCursor = true;
@@ -511,15 +511,6 @@
             this.txtSearch.Size = new System.Drawing.Size(353, 38);
             this.txtSearch.TabIndex = 7;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
-            // guna2Panel4
-            // 
-            this.guna2Panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.guna2Panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.guna2Panel4.Location = new System.Drawing.Point(84, 816);
-            this.guna2Panel4.Name = "guna2Panel4";
-            this.guna2Panel4.Size = new System.Drawing.Size(1121, 95);
-            this.guna2Panel4.TabIndex = 4;
             // 
             // CategoryPanel
             // 
@@ -630,16 +621,23 @@
             this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
             this.dataGridViewImageColumn2.Width = 25;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(96, 808);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1096, 100);
+            this.flowLayoutPanel1.TabIndex = 10;
+            // 
             // frmPOS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(1584, 911);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.guna2VSeparator1);
             this.Controls.Add(this.guna2VSeparator2);
             this.Controls.Add(this.guna2Separator1);
-            this.Controls.Add(this.guna2Panel4);
             this.Controls.Add(this.guna2Panel3);
             this.Controls.Add(this.guna2Panel2);
             this.Controls.Add(this.guna2Panel1);
@@ -675,7 +673,6 @@
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
         private System.Windows.Forms.Label lblTable;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel3;
-        private Guna.UI2.WinForms.Guna2Panel guna2Panel4;
         public Guna.UI2.WinForms.Guna2TextBox txtSearch;
         private Guna.UI2.WinForms.Guna2Button guna2Button1;
         private System.Windows.Forms.Label lblWaiter;
@@ -703,5 +700,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvpID;
         private System.Windows.Forms.Label lblMainID;
         private Guna.UI2.WinForms.Guna2Button guna2Button8;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
