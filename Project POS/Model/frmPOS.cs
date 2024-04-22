@@ -23,6 +23,7 @@ namespace Project_POS.Model
             guna2DataGridView1.CellClick += guna2DataGridView1_CellClick;
             this.guna2Button5.Click += new System.EventHandler(this.guna2Button5_Click);
             lblMainID.Text = "No ID Loaded"; // Default text when no ID is passed
+            LoadTables();
         }
         public frmPOS(int? mainID = null) : this() // Ensure base initialization is called
         {
@@ -34,6 +35,7 @@ namespace Project_POS.Model
                 LoadWaiterName(mainID.Value);
                 LoadTableName(mainID.Value);    
                 LoadTotalAmount(mainID.Value);
+                
             }
         }
 
@@ -657,7 +659,7 @@ namespace Project_POS.Model
             lblWaiter.Text = "";
             lblTable.Visible = false;
             lblWaiter.Visible = false;
-            OrderType = "Takeout";
+            OrderType = "EatIn";
         }
 
         public void label1_Click(object sender, EventArgs e)
@@ -679,6 +681,74 @@ namespace Project_POS.Model
         {
 
         }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void LoadTables()
+        {
+            string qry = "SELECT MainID, TableName, WaiterName, Status FROM tbMain";
+            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                flowLayoutPanel1.Controls.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    ucTable table = new ucTable
+                    {
+                        MainID = Convert.ToInt32(row["MainID"]),
+                        TableName = row["TableName"]?.ToString() ?? "Not Defined",
+                        Waiter = row["WaiterName"]?.ToString() ?? "Not Defined",
+                        Status = row["Status"]?.ToString() ?? "Not Defined"
+                    };
+                    flowLayoutPanel1.Controls.Add(table);
+                }
+            }
+        }
+
+        private void guna2Button8_Click(object sender, EventArgs e)
+        {
+            // Extract the numeric ID from lblMainID's text
+            int mainId = int.Parse(lblMainID.Text.Replace("Main ID: ", "").Trim());
+
+            decimal totalAmount = 0;
+
+            // Define the connection string and SQL query
+            string connectionString = Database.ConnectionString;
+            string query = "SELECT Total FROM tbMain WHERE MainID = @MainID";
+
+            // Create the connection and command
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                con.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, con))
+                {
+                    // Add parameters to prevent SQL injection
+                    cmd.Parameters.AddWithValue("@MainID", mainId);
+
+                    // Execute the command and read the results
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            totalAmount = reader.GetDecimal("Total"); // Ensure the column name matches
+                        }
+                    }
+                }
+            }
+
+            // Open the Pay form with the retrieved data
+            Pay payForm = new Pay(mainId, totalAmount);
+            payForm.ShowDialog(); // Use ShowDialog to make it modal if needed, or Show for a non-modal window
+        }
+
+
     }
 }
 

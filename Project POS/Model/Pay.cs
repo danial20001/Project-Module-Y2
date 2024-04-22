@@ -85,6 +85,11 @@ namespace Project_POS.Model
         {
 
         }
+
+        private void Pay_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

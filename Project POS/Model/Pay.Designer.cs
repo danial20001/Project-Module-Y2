@@ -101,6 +101,7 @@
             this.Name = "Pay";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Pay";
+            this.Load += new System.EventHandler(this.Pay_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
