@@ -88,11 +88,12 @@
             this.textPassword.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.textPassword.Location = new System.Drawing.Point(81, 170);
             this.textPassword.Name = "textPassword";
-            this.textPassword.PasswordChar = '\0';
+            this.textPassword.PasswordChar = '●';
             this.textPassword.PlaceholderText = "";
             this.textPassword.SelectedText = "";
             this.textPassword.Size = new System.Drawing.Size(153, 36);
             this.textPassword.TabIndex = 1;
+            this.textPassword.UseSystemPasswordChar = true;
             this.textPassword.TextChanged += new System.EventHandler(this.textPassword_TextChanged);
             // 
             // usernamebox
@@ -127,7 +128,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Log In";
