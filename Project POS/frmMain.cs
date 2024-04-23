@@ -1,4 +1,5 @@
 ﻿using Project_POS.Model;
+using Project_POS.Report;
 using Project_POS.View;
 using System;
 using System.Collections.Generic;
@@ -109,7 +110,7 @@ namespace Project_POS
 
         private void guna2Button9_Click(object sender, EventArgs e)
         {
-
+            AddControls(new frmStats());
         }
 
         private void centerPanel_Paint(object sender, PaintEventArgs e)

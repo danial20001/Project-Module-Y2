@@ -689,7 +689,8 @@ namespace Project_POS.Model
 
         private void LoadTables()
         {
-            string qry = "SELECT MainID, TableName, WaiterName, Status FROM tbMain";
+            // Updated query to include a WHERE clause that filters for 'Pending' status
+            string qry = "SELECT MainID, TableName, WaiterName, Status FROM tbMain WHERE Status = 'Pending'";
             using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
             {
                 MySqlCommand cmd = new MySqlCommand(qry, con);
@@ -711,6 +712,7 @@ namespace Project_POS.Model
                 }
             }
         }
+
 
         private void guna2Button8_Click(object sender, EventArgs e)
         {

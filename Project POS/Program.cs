@@ -1,4 +1,5 @@
 ﻿using Project_POS.Model;
+using Project_POS.Report;
 using Renci.SshNet;
 using System;
 using System.Windows.Forms;
