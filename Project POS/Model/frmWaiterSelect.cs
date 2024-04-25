@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,22 +47,28 @@ namespace Project_POS.Model
         private void LoadWaiters()
         {
             string qry = "SELECT staffID, sName, imagePath FROM staff";
-            using (MySqlConnection con = new MySqlConnection(Database.ConnectionString))
+            using (var con = new MySqlConnection(Database.ConnectionString))
             {
-                MySqlCommand cmd = new MySqlCommand(qry, con);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
+                var cmd = new MySqlCommand(qry, con);
+                var da = new MySqlDataAdapter(cmd);
+                var dt = new DataTable();
                 da.Fill(dt);
 
                 WaiterPanel.Controls.Clear();
                 foreach (DataRow row in dt.Rows)
                 {
-                    ucWaiter waiter = new ucWaiter
+                    var waiter = new ucWaiter
                     {
                         WaiterId = Convert.ToInt32(row["staffID"]),
                         WaiterName = row["sName"].ToString(),
-                        WaiterImage = Image.FromFile(row["imagePath"].ToString())
                     };
+
+                    string imagePath = row["imagePath"].ToString().Trim();
+                    if (!string.IsNullOrWhiteSpace(imagePath) && File.Exists(imagePath))
+                    {
+                        waiter.WaiterImage = Image.FromFile(imagePath);
+                    }
+
                     waiter.WaiterSelected += Waiter_Selected;
                     WaiterPanel.Controls.Add(waiter);
                 }
@@ -70,7 +77,7 @@ namespace Project_POS.Model
 
         private void Waiter_Selected(object sender, EventArgs e)
         {
-            ucWaiter selectedWaiter = sender as ucWaiter;
+            var selectedWaiter = sender as ucWaiter;
             if (selectedWaiter != null)
             {
                 SelectedWaiterName = selectedWaiter.WaiterName;
